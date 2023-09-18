@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Blog</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .blog-post {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        #new-post {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Simple Blog</h1>
+    </header>
+    <div id="blog-posts">
+        <!-- Blog post content will be added dynamically with JavaScript -->
+    </div>
+    <button id="add-post-button">Add New Post</button>
+    <div id="new-post">
+        <h2>Add a New Post</h2>
+        <input type="text" id="post-title" placeholder="Title">
+        <textarea id="post-content" placeholder="Content"></textarea>
+        <button id="submit-post">Submit</button>
+    </div>
+    <script>
+        // JavaScript for handling blog posts
+        const blogPosts = document.getElementById('blog-posts');
+        const addPostButton = document.getElementById('add-post-button');
+        const newPost = document.getElementById('new-post');
+        const postTitle = document.getElementById('post-title');
+        const postContent = document.getElementById('post-content');
+        const submitPost = document.getElementById('submit-post');
+
+        addPostButton.addEventListener('click', () => {
+            newPost.style.display = 'block';
+        });
+
+        submitPost.addEventListener('click', () => {
+            const title = postTitle.value;
+            const content = postContent.value;
+
+            if (title && content) {
+                const post = document.createElement('div');
+                post.classList.add('blog-post');
+                post.innerHTML = `<h2>${title}</h2><p>${content}</p>`;
+                blogPosts.appendChild(post);
+
+                // Store post data in local storage (for demo purposes only)
+                const postData = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                postData.push({ title, content });
+                localStorage.setItem('blogPosts', JSON.stringify(postData));
+
+                // Clear input fields
+                postTitle.value = '';
+                postContent.value = '';
+
+                newPost.style.display = 'none';
+            }
+        });
+
+        // Load stored posts on page load
+        window.addEventListener('load', () => {
+            const storedPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            for (const post of storedPosts) {
+                const blogPost = document.createElement('div');
+                blogPost.classList.add('blog-post');
+                blogPost.innerHTML = `<h2>${post.title}</h2><p>${post.content}</p>`;
+                blogPosts.appendChild(blogPost);
+            }
+        });
+    </script>
+</body>
+</html>
